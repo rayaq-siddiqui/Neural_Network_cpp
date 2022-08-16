@@ -31,6 +31,12 @@ Neuron &Neuron::operator=(Neuron &&o) {
     return *this;
 }
 
+double Neuron::getWeight() { return weight; }
+void Neuron::setWeight(double w) { weight = w; }
+
+double Neuron::getBias() { return bias; }
+void Neuron::setBias(double b) { bias = b; }
+
 // PRIVATE FUNCTIONS
 void Neuron::swap(Neuron &o) {
     std::swap(weight, o.weight);

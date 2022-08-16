@@ -2,10 +2,15 @@
 
 // PUBLIC DATA FIELD
 // ctor
-Dense::Dense(int n) : neuronCount{n} {
+Dense::Dense(int n, Layer *l) : neuronCount{n}, prevLayer{l} {
     for (int i = 0; i < neuronCount; ++i) {
+        double weight = ((double)rand() / RAND_MAX);
+        double bias = ((double)rand() / RAND_MAX);
+
+        weight = rand() % 2 == 0 ? weight : -weight;
+        bias = rand() % 2 == 0 ? bias : -bias;
         neurons.emplace_back(
-            new Neuron{rand() % 2, rand() % 2}
+            new Neuron{weight, bias}
         );
     }
 }
@@ -18,7 +23,8 @@ Dense::~Dense() {
 }
 
 // copy ctor
-Dense::Dense(const Dense &o) : neuronCount{o.neuronCount} {
+Dense::Dense(const Dense &o) 
+    : neuronCount{o.neuronCount}, prevLayer{o.prevLayer} {
     for (int i = 0; i < neuronCount; ++i) {
         neurons.emplace_back(
             new Neuron{*o.neurons[i]}
@@ -27,7 +33,8 @@ Dense::Dense(const Dense &o) : neuronCount{o.neuronCount} {
 }
 
 // move ctor
-Dense::Dense(Dense &&o) : neuronCount{o.neuronCount} {
+Dense::Dense(Dense &&o) 
+    : neuronCount{o.neuronCount}, prevLayer{o.prevLayer} {
     for (int i = 0; i < neuronCount; ++i) {
         neurons.emplace_back(
             o.neurons[i]
@@ -57,5 +64,23 @@ void Dense::swap(Dense &o) {
     for (int i = 0; i < neuronCount; ++i) {
         std::swap(neurons[i], o.neurons[i]);
     }
+    std::swap(prevLayer, o.prevLayer);
 }
 
+std::vector<double> Dense::layerCall() {
+    std::vector<double> prev = prevLayer->call();
+
+    std::vector<double> ret;
+    double sum = 0;
+    for (int i = 0; i < prev.size(); ++i) {
+        sum += prev[i];
+    }
+
+    for (int i = 0; i < neurons.size(); ++i) {
+        double weight = neurons[i]->getWeight();
+        double bias = neurons[i]->getBias();
+        ret.emplace_back(bias + weight * sum);
+    }
+
+    return ret;
+}

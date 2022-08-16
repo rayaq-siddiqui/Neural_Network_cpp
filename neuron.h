@@ -30,6 +30,13 @@ class Neuron {
 
         // move assignment operator
         Neuron &operator=(Neuron &&o);
+
+        // getters/setters
+        double getWeight();
+        void setWeight(double w);
+
+        double getBias();
+        void setBias(double b);
 };
 
 #endif

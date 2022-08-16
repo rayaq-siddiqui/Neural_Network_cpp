@@ -1,21 +1,23 @@
 #ifndef DENSE_H
 #define DENSE_H
 
-#include <vector>
 #include <stdlib.h>
 #include <utility>
 #include "../neuron.h"
+#include "layer.h"
 
-class Dense {
+class Dense : public Layer {
     std::vector<Neuron*> neurons;
     const int neuronCount;
+    Layer *prevLayer;
 
     // private helper
     void swap(Dense &o);
+    std::vector<double> layerCall() override;
 
     public:
         // ctor
-        Dense(int n);
+        Dense(int n, Layer *l=nullptr);
 
         // dtor
         ~Dense();
