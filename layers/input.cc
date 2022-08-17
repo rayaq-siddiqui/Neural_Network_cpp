@@ -1,4 +1,5 @@
 #include "input.h"
+#include <iostream>
 
 using namespace std;
 
@@ -39,5 +40,11 @@ void Input::swap(Input &o) {
 }
 
 std::vector<double> Input::layerCall() {
+    // output
+    cout << "node values: ";
+    for (int i = 0; i < neurons.size(); ++i) {
+        cout << neurons[i] << " ";
+    }
+    cout << endl;
     return neurons;
 }

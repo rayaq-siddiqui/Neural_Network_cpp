@@ -14,10 +14,10 @@ class Input : public Layer {
 
     public:
         // ctor
-        Input(std::vector<double> data);
+        Input(std::vector<double> data={});
 
         // dtor
-        ~Input();
+        virtual ~Input();
 
         // copy ctor
         Input(const Input &o);

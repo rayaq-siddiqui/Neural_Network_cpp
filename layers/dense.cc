@@ -1,4 +1,7 @@
 #include "dense.h"
+#include <iostream>
+
+using namespace std;
 
 // PUBLIC DATA FIELD
 // ctor
@@ -56,6 +59,10 @@ Dense &Dense::operator=(Dense &&o) {
     return *this;
 }
 
+void Dense::setPrevLayer(Layer *l) {
+    prevLayer = l;
+}
+
 // PRIVATE DATA FIELD
 void Dense::swap(Dense &o) {
     if (neuronCount != o.neuronCount) {
@@ -81,6 +88,21 @@ std::vector<double> Dense::layerCall() {
         double bias = neurons[i]->getBias();
         ret.emplace_back(bias + weight * sum);
     }
+
+    // output
+    cout << endl << "node weights: ";
+    for (int i = 0; i < neurons.size(); ++i) {
+        cout << "(" 
+            << neurons[i]->getWeight() << "," 
+            << neurons[i]->getBias()
+            << ") ";
+    }
+    cout << endl;
+    cout << "node values: ";
+    for (int i = 0; i < ret.size(); ++i) {
+        cout << ret[i] << " ";
+    }
+    cout << endl;
 
     return ret;
 }

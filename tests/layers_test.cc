@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
-#include "layers/input.h"
-#include "layers/dense.h"
+#include "../layers/input.h"
+#include "../layers/dense.h"
 
 using namespace std;
 

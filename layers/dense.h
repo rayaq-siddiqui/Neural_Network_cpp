@@ -20,7 +20,7 @@ class Dense : public Layer {
         Dense(int n, Layer *l=nullptr);
 
         // dtor
-        ~Dense();
+        virtual ~Dense();
 
         // copy ctor
         Dense(const Dense &o);
@@ -33,6 +33,9 @@ class Dense : public Layer {
 
         // mao
         Dense &operator=(Dense &&o);
+
+        // getters/setters
+        void setPrevLayer(Layer *l);
 };
 
 #endif 
