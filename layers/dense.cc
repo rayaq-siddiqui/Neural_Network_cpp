@@ -5,13 +5,14 @@ using namespace std;
 
 // PUBLIC DATA FIELD
 // ctor
-Dense::Dense(int n, Layer *l) : neuronCount{n}, prevLayer{l} {
+Dense::Dense(int n, Layer *l, std::string act_fn) 
+    : neuronCount{n}, prevLayer{l}, act_fn{act_fn} {
     for (int i = 0; i < neuronCount; ++i) {
         double weight = ((double)rand() / RAND_MAX);
         double bias = ((double)rand() / RAND_MAX);
 
-        weight = rand() % 2 == 0 ? weight : -weight;
-        bias = rand() % 2 == 0 ? bias : -bias;
+        weight = rand() % 4 != 0 ? weight : -weight;
+        bias = rand() % 4 != 0 ? bias : -bias;
         neurons.emplace_back(
             new Neuron{weight, bias}
         );
@@ -83,14 +84,32 @@ std::vector<double> Dense::layerCall() {
         sum += prev[i];
     }
 
-    for (int i = 0; i < neurons.size(); ++i) {
-        double weight = neurons[i]->getWeight();
-        double bias = neurons[i]->getBias();
-        ret.emplace_back(bias + weight * sum);
+    if (act_fn == "relu") {
+        for (int i = 0; i < neurons.size(); ++i) {
+            double weight = neurons[i]->getWeight();
+            double bias = neurons[i]->getBias();
+            double val = relu(bias + weight * sum);
+            ret.emplace_back(val);
+        }
+    }
+    else if (act_fn == "softmax") {
+        double s_sum = 0;
+        for (int i = 0; i < neurons.size(); ++i) {
+            double weight = neurons[i]->getWeight();
+            double bias = neurons[i]->getBias();
+            s_sum += bias + weight * sum;
+        }
+
+        for (int i = 0; i < neurons.size(); ++i) {
+            double weight = neurons[i]->getWeight();
+            double bias = neurons[i]->getBias();
+            double val = softmax(bias + weight * sum, s_sum);
+            ret.emplace_back(val);
+        }
     }
 
     // output
-    cout << endl << "node weights: ";
+    cout << endl << "node weights: " << act_fn << " ";
     for (int i = 0; i < neurons.size(); ++i) {
         cout << "(" 
             << neurons[i]->getWeight() << "," 
@@ -105,4 +124,13 @@ std::vector<double> Dense::layerCall() {
     cout << endl;
 
     return ret;
+}
+
+double Dense::relu(double x) {
+    if (x < 0) return 0;
+    return x;
+}
+
+double Dense::softmax(double x, double sum) {
+    return x/sum;
 }

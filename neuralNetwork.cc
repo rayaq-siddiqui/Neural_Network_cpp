@@ -17,7 +17,7 @@ NeuralNetwork::NeuralNetwork(
         );
     }
 
-    Dense *out = new Dense{outSize, layers[layers.size()-1]};
+    Dense *out = new Dense{outSize, layers[layers.size()-1], "softmax"};
     layers.emplace_back(out);
 }
 
